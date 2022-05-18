@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Col, FormControl, InputGroup, Row, Table } from "react-bootstrap";
 import { Pauta } from "../../../models/pauta";
+import { AtaPautaModal } from "./AtaPautaModal";
 
 interface AtaPautasProps {
   pautas: Pauta[];
@@ -8,13 +9,15 @@ interface AtaPautasProps {
 }
 
 export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
-  const [topico, setTopico] = useState('');
-  const addPautaHandler = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModalHandler = () => setIsModalOpen(true);
+  const closeModalHandler = () => setIsModalOpen(false);
+
+  const addPautaHandler = (pauta: Pauta) => {
     onAddPauta({
+      ...pauta,
       indice: pautas.length + 1,
-      topico
     });
-    setTopico('');
   }
 
   return (
@@ -30,7 +33,7 @@ export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
           </thead>
           <tbody>
             {pautas.map(p => (
-              <tr key={p.topico}>
+              <tr key={p.indice}>
                 <td>{p.indice}</td>
                 <td>{p.topico}</td>
                 <td style={{ width: '50px' }}>
@@ -41,22 +44,16 @@ export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
           </tbody>
         </Table>
       )}
-      <Row>
-        <Col sm='12'>
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Pauta"
-              aria-label="Pauta"
-              aria-describedby="basic-addon2"
-              value={topico}
-              onChange={e => setTopico(e.target.value)}
-            />
-            <Button variant="primary" onClick={addPautaHandler}>
-              Adicionar
-            </Button>
-          </InputGroup>
-        </Col>
-      </Row>
+
+      <Button variant="primary" size="sm" onClick={openModalHandler}>
+        Adicionar
+      </Button>
+
+      <AtaPautaModal
+        openModal={isModalOpen}
+        onClose={closeModalHandler}
+        onAddPauta={addPautaHandler}
+      />
     </>
   )
 }

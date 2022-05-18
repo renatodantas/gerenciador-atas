@@ -1,6 +1,6 @@
 export interface Pauta {
-  indice: number;
+  indice?: number;
   topico: string;
-  descricao?: string;
-  deliberacoes?: string[];
+  descricao: string;
+  deliberacoes: string[];
 }

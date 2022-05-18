@@ -2,18 +2,18 @@ import React, { FormEvent, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
 
-interface AtaFormParticipanteModalProps {
+interface AtaParticipanteModalProps {
   openModal: boolean;
   onClose: () => void;
   onAddParticipante: (p: Participante) => void;
 }
 
-export const AtaFormParticipanteModal = ({ openModal, onClose, onAddParticipante }: AtaFormParticipanteModalProps) => {
+export const AtaParticipanteModal = ({ openModal, onClose, onAddParticipante }: AtaParticipanteModalProps) => {
   const [nome, setNome] = useState('');
   const [area, setArea] = useState('');
   const [email, setEmail] = useState('');
   const [isPresente, setIsPresente] = useState(true);
-  console.log('isPresente: ', isPresente);
+  console.count('Atualizou!');
 
   const limparCampos = () => {
     setNome('');

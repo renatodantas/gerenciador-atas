@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
-import { AtaFormParticipanteModal } from "./AtaParticipanteModal";
+import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
-interface AtaFormParticipantesProps {
+interface AtaParticipantesProps {
   participantes: Participante[];
   onAddParticipante: (p: Participante) => void;
 }
 
-export const AtaFormParticipantes = ({ participantes, onAddParticipante }: AtaFormParticipantesProps) => {
+export const AtaParticipantes = ({ participantes, onAddParticipante }: AtaParticipantesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalHandler = () => setIsModalOpen(true);
   const closeModalHandler = () => setIsModalOpen(false);
@@ -51,7 +51,7 @@ export const AtaFormParticipantes = ({ participantes, onAddParticipante }: AtaFo
         Adicionar
       </Button>
 
-      <AtaFormParticipanteModal
+      <AtaParticipanteModal
         openModal={isModalOpen}
         onClose={closeModalHandler}
         onAddParticipante={addParticipanteHandler}

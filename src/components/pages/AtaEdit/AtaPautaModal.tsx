@@ -1,0 +1,104 @@
+import { Editor, EditorState } from 'draft-js';
+import React, { FormEvent, useState } from "react";
+import { Button, FloatingLabel, Form, Modal, Table } from "react-bootstrap";
+import { Pauta } from "../../../models/pauta";
+
+
+interface AtaPautaModalProps {
+  openModal: boolean;
+  onClose: () => void;
+  onAddPauta: (p: Pauta) => void;
+}
+
+export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalProps) => {
+  const [topico, setTopico] = useState('');
+  const [descricao, setDescricao] = useState(() => EditorState.createEmpty(),);
+  const [deliberacao, setDeliberacao] = useState('');
+  const [deliberacoes, setDeliberacoes] = useState<string[]>([]);
+
+  const limparCampos = () => {
+    setTopico('');
+    //setDescricao('');
+    setDeliberacoes([]);
+  }
+
+  const addDeliberacaoHandler = () => {
+    setDeliberacoes(current => [...current, deliberacao]);
+    setDeliberacao('');
+  }
+
+  const removeDeliberacaoHandler = (index: number) => {
+    setDeliberacoes(current => [...current.splice(index, 1)])
+  }
+
+  const submitHandler = (event: FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    onAddPauta({ topico, descricao: 'descricao', deliberacoes });
+    limparCampos();
+    onClose();
+  }
+
+  return (
+    <Modal show={openModal} onHide={onClose} size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Adicionar Participante</Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <FloatingLabel className="mb-3" label="Tópico">
+          <Form.Control type="text" name="topico" placeholder="Tópico" value={topico} onChange={e => setTopico(e.target.value)} />
+        </FloatingLabel>
+
+        <Editor editorState={descricao} onChange={setDescricao} />
+
+        {/* <Row>
+          <Col sm='10'>
+            <FormControl
+              as="textarea"
+              name="deliberacao"
+              placeholder="Deliberação"
+              aria-label="Deliberação"
+              value={deliberacao}
+              onChange={e => setDeliberacao(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <Button variant="primary" onClick={addDeliberacaoHandler}>
+              Adicionar
+            </Button>
+          </Col>
+        </Row> */}
+
+        {deliberacoes.length > 0 && (
+          <Table size="sm" className="mt-3">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Deliberação</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {deliberacoes.map((d, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{d}</td>
+                  <td style={{ width: '50px' }}>
+                    <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => removeDeliberacaoHandler(index)}></i>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Modal.Body>
+
+      <Modal.Footer>
+        <Button variant="link" onClick={onClose}>Cancelar</Button>
+        <Button variant="primary" size="sm" onClick={submitHandler}>
+          <i className="bi-plus-circle-fill fs-6 me-2"></i> Adicionar
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+}

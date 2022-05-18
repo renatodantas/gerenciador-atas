@@ -1,23 +1,29 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
 
-const dataAtual = new Date().toISOString().split('T')[0];
-type Responsavel = 'CSAN' | 'NGSA1' | 'NGSA2';
+export interface AtaIdentificacaoProps {
+  responsavel: [string, Dispatch<SetStateAction<string>>],
+  numero: [number | null, Dispatch<SetStateAction<number | null>>],
+  assunto: [string, Dispatch<SetStateAction<string>>],
+  data: [string, Dispatch<SetStateAction<string>>],
+  local: [string, Dispatch<SetStateAction<string>>],
+  horario: [string, Dispatch<SetStateAction<string>>],
+}
 
-export const AtaIdentificacao = () => {
-  const [responsavel, setResponsavel] = useState<Responsavel>('CSAN');
-  const [numero, setNumero] = useState<number | null>(null);
-  const [assunto, setAssunto] = useState('');
-  const [data, setData] = useState(dataAtual);
-  const [local, setLocal] = useState('Virtual via Google Meet');
-  const [horario, setHorario] = useState('');
+export const AtaIdentificacao = (props: AtaIdentificacaoProps) => {
+  const [responsavel, setResponsavel] = props.responsavel;
+  const [numero, setNumero] = props.numero;
+  const [assunto, setAssunto] = props.assunto;
+  const [data, setData] = props.data;
+  const [local, setLocal] = props.local;
+  const [horario, setHorario] = props.horario;
 
   return (
     <>
       <Row>
         <Col sm='8'>
           <FloatingLabel controlId="responsavel" label="Responsável" className="mb-2">
-            <Form.Select aria-label="Responsável" value={responsavel} onChange={e => setResponsavel(e.target.value as Responsavel)}>
+            <Form.Select aria-label="Responsável" value={responsavel} onChange={e => setResponsavel(e.target.value)}>
               <option value="EQUIPEA">Equipe A</option>
               <option value="EQUIPEB">Equipe B</option>
               <option value="CT-EQUIPE">CT-Equipe</option>
