@@ -1,0 +1,13 @@
+html {
+  height: 100vh;
+}
+
+body {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+.icone-link {
+  cursor: pointer;
+  margin-right: 1rem;
+}

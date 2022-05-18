@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
 import { AtaFormParticipanteModal } from "./AtaParticipanteModal";
@@ -20,41 +20,38 @@ export const AtaFormParticipantes = ({ participantes, onAddParticipante }: AtaFo
 
   return (
     <>
-      <Table size="sm">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Área</th>
-            <th>E-mail</th>
-            <th>Presente</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {participantes.length === 0 ? (
-              <td colSpan={5} className="text-center">Nenhum participante cadastrado</td>
-            ) :
-              participantes.map(p => (
-                <Fragment key={p.email}>
-                  <td>{p.nome}</td>
-                  <td>{p.area}</td>
-                  <td>{p.email}</td>
-                  <td>{p.presente ? 'Sim' : 'Nâo'}</td>
-                  <td></td>
-                </Fragment>
-              ))}
-          </tr>
-        </tbody>
-      </Table>
+      {participantes.length > 0 && (
+        <Table size="sm">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Área</th>
+              <th>E-mail</th>
+              <th>Presente</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {participantes.map(p => (
+              <tr key={p.email}>
+                <td>{p.nome}</td>
+                <td>{p.area}</td>
+                <td>{p.email}</td>
+                <td>{p.presente ? 'Sim' : 'Nâo'}</td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
 
       <Button variant="primary" size="sm" onClick={openModalHandler}>
-        Adicionar Participante
+        Adicionar
       </Button>
 
       <AtaFormParticipanteModal
         openModal={isModalOpen}
-        onCloseModal={closeModalHandler}
+        onClose={closeModalHandler}
         onAddParticipante={addParticipanteHandler}
       />
     </>

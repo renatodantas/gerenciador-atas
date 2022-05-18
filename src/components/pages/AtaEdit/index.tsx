@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
-import { AtaFormAssuntos } from "./AtaAssuntos";
 import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaFormParticipantes } from "./AtaParticipantes";
+import { AtaPautas } from "./AtaPautas";
 
 export const AtaEditPage: FC = () => {
   const [participantes, setParticipantes] = useState<Participante[]>([]);
@@ -33,9 +33,9 @@ export const AtaEditPage: FC = () => {
       </Card>
 
       <Card className="mb-3 shadow">
-        <Card.Header>Assuntos</Card.Header>
+        <Card.Header>Pautas</Card.Header>
         <Card.Body>
-          <AtaFormAssuntos />
+          <AtaPautas />
         </Card.Body>
       </Card>
 

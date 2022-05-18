@@ -4,11 +4,11 @@ import { Participante } from "../../../models/participante";
 
 interface AtaFormParticipanteModalProps {
   openModal: boolean;
-  onCloseModal: () => void;
+  onClose: () => void;
   onAddParticipante: (p: Participante) => void;
 }
 
-export const AtaFormParticipanteModal = ({ openModal, onCloseModal, onAddParticipante }: AtaFormParticipanteModalProps) => {
+export const AtaFormParticipanteModal = ({ openModal, onClose, onAddParticipante }: AtaFormParticipanteModalProps) => {
   const [nome, setNome] = useState('');
   const [area, setArea] = useState('');
   const [email, setEmail] = useState('');
@@ -17,20 +17,21 @@ export const AtaFormParticipanteModal = ({ openModal, onCloseModal, onAddPartici
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => () => {
+    console.log('[DESMONTOU]');
     setNome('');
     setArea('');
     setEmail('');
     setIsPresente(true);
-  }, []);
+  });
 
   const submitHandler = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onAddParticipante({ nome, area, email, presente: isPresente });
-    onCloseModal();
+    onClose();
   }
 
   return (
-    <Modal show={openModal} onHide={onCloseModal}>
+    <Modal show={openModal} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Adicionar Participante</Modal.Title>
       </Modal.Header>
@@ -54,7 +55,7 @@ export const AtaFormParticipanteModal = ({ openModal, onCloseModal, onAddPartici
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="link" onClick={onCloseModal}>Cancelar</Button>
+        <Button variant="link" onClick={onClose}>Cancelar</Button>
         <Button variant="primary" size="sm" onClick={submitHandler}>
           <i className="bi-plus-circle-fill fs-6 me-2"></i> Adicionar
         </Button>
