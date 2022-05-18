@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
 
@@ -15,18 +15,17 @@ export const AtaFormParticipanteModal = ({ openModal, onClose, onAddParticipante
   const [isPresente, setIsPresente] = useState(true);
   console.log('isPresente: ', isPresente);
 
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => () => {
-    console.log('[DESMONTOU]');
+  const limparCampos = () => {
     setNome('');
     setArea('');
     setEmail('');
     setIsPresente(true);
-  });
+  }
 
   const submitHandler = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onAddParticipante({ nome, area, email, presente: isPresente });
+    limparCampos();
     onClose();
   }
 

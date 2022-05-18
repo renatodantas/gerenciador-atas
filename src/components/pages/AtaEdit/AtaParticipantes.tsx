@@ -38,7 +38,9 @@ export const AtaFormParticipantes = ({ participantes, onAddParticipante }: AtaFo
                 <td>{p.area}</td>
                 <td>{p.email}</td>
                 <td>{p.presente ? 'Sim' : 'Nâo'}</td>
-                <td></td>
+                <td>
+                  <i className="icone-link bi-x-circle text-danger" title="Excluir"></i>
+                </td>
               </tr>
             ))}
           </tbody>
