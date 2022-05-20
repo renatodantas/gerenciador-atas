@@ -34,7 +34,11 @@ export const AtaEditPage: FC = () => {
   }
   const addPauta = (pauta: Pauta) => {
     setPautas(current => [...current, pauta])
-    console.log('pautas:', pautas);
+    console.log('adding pauta:', pauta);
+  }
+  const removePauta = (index: number) => {
+    setPautas(current => current.splice(index, 1))
+    console.log('removing pauta:', index);
   }
 
   return (
@@ -60,7 +64,7 @@ export const AtaEditPage: FC = () => {
       <Card className="mb-3 shadow">
         <Card.Header>Pautas</Card.Header>
         <Card.Body>
-          <AtaPautas pautas={pautas} onAddPauta={addPauta} />
+          <AtaPautas pautas={pautas} onAddPauta={addPauta} onRemovePauta={removePauta} />
         </Card.Body>
       </Card>
 

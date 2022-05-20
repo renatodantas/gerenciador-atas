@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Button, Col, FormControl, InputGroup, Row, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { Pauta } from "../../../models/pauta";
 import { AtaPautaModal } from "./AtaPautaModal";
 
 interface AtaPautasProps {
   pautas: Pauta[];
   onAddPauta: (p: Pauta) => void;
+  onRemovePauta: (index: number) => void;
 }
 
-export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
+export const AtaPautas = ({ pautas, onAddPauta, onRemovePauta }: AtaPautasProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalHandler = () => setIsModalOpen(true);
   const closeModalHandler = () => setIsModalOpen(false);
@@ -19,6 +20,8 @@ export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
       indice: pautas.length + 1,
     });
   }
+
+  const removePautaHandler = (index: number) => onRemovePauta(index);
 
   return (
     <>
@@ -32,12 +35,12 @@ export const AtaPautas = ({ pautas, onAddPauta }: AtaPautasProps) => {
             </tr>
           </thead>
           <tbody>
-            {pautas.map(p => (
+            {pautas.map((p, index) => (
               <tr key={p.indice}>
                 <td>{p.indice}</td>
                 <td>{p.topico}</td>
                 <td style={{ width: '50px' }}>
-                  <i className="icone-link bi-x-circle text-danger" title="Excluir"></i>
+                  <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => removePautaHandler(index)}></i>
                 </td>
               </tr>
             ))}

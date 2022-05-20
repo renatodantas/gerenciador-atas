@@ -1,16 +1,16 @@
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'draft-js/dist/Draft.css'
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { App } from './App'
 import './global.css'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+  document.getElementById('root')!
+)

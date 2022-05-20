@@ -1,8 +1,7 @@
-import { Editor, EditorState } from 'draft-js';
 import React, { FormEvent, useState } from "react";
 import { Button, FloatingLabel, Form, Modal, Table } from "react-bootstrap";
 import { Pauta } from "../../../models/pauta";
-
+import { TheEditor } from "../../common/Editor";
 
 interface AtaPautaModalProps {
   openModal: boolean;
@@ -12,7 +11,7 @@ interface AtaPautaModalProps {
 
 export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalProps) => {
   const [topico, setTopico] = useState('');
-  const [descricao, setDescricao] = useState(() => EditorState.createEmpty(),);
+  //const [descricao, setDescricao] = useState(() => EditorState.createEmpty(),);
   const [deliberacao, setDeliberacao] = useState('');
   const [deliberacoes, setDeliberacoes] = useState<string[]>([]);
 
@@ -38,6 +37,7 @@ export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalP
     onClose();
   }
 
+
   return (
     <Modal show={openModal} onHide={onClose} size="lg">
       <Modal.Header closeButton>
@@ -48,8 +48,6 @@ export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalP
         <FloatingLabel className="mb-3" label="Tópico">
           <Form.Control type="text" name="topico" placeholder="Tópico" value={topico} onChange={e => setTopico(e.target.value)} />
         </FloatingLabel>
-
-        <Editor editorState={descricao} onChange={setDescricao} />
 
         {/* <Row>
           <Col sm='10'>
@@ -68,6 +66,7 @@ export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalP
             </Button>
           </Col>
         </Row> */}
+        <TheEditor />
 
         {deliberacoes.length > 0 && (
           <Table size="sm" className="mt-3">
