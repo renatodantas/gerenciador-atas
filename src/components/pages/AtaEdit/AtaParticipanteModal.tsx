@@ -1,6 +1,7 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
+import { useFormFields } from "../../../utils/useFormField.hook";
 
 interface AtaParticipanteModalProps {
   openModal: boolean;
@@ -9,23 +10,35 @@ interface AtaParticipanteModalProps {
 }
 
 export const AtaParticipanteModal = ({ openModal, onClose, onAddParticipante }: AtaParticipanteModalProps) => {
-  const [nome, setNome] = useState('');
-  const [area, setArea] = useState('');
-  const [email, setEmail] = useState('');
-  const [isPresente, setIsPresente] = useState(true);
-  console.count('Atualizou!');
+  // const [isPresente, setIsPresente] = useState(true);
+  const { formFields, createChangeHandler } = useFormFields({
+    nome: '',
+    area: '',
+    email: '',
+    isPresente: true,
+  })
+  console.log('Filds:', formFields);
 
-  const limparCampos = () => {
-    setNome('');
-    setArea('');
-    setEmail('');
-    setIsPresente(true);
-  }
+  useEffect(() => {
+    console.log('atualizou');
+  }, [])
+
+  // const limparCampos = () => {
+  //   setNome('');
+  //   setArea('');
+  //   setEmail('');
+  //   setIsPresente(true);
+  // }
 
   const submitHandler = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    onAddParticipante({ nome, area, email, presente: isPresente });
-    limparCampos();
+    onAddParticipante({
+      nome: formFields.nome,
+      area: formFields.area,
+      email: formFields.email,
+      presente: formFields.isPresente
+    });
+    // limparCampos();
     onClose();
   }
 
@@ -37,19 +50,19 @@ export const AtaParticipanteModal = ({ openModal, onClose, onAddParticipante }: 
 
       <Modal.Body>
         <FloatingLabel className="mb-3" label="Nome">
-          <Form.Control type="text" name="nome" placeholder="Nome" value={nome} onChange={e => setNome(e.target.value)} />
+          <Form.Control type="text" name="nome" placeholder="Nome" value={formFields.nome} onChange={createChangeHandler('nome')} />
         </FloatingLabel>
 
         <FloatingLabel className="mb-3" label="Área">
-          <Form.Control type="text" name="area" placeholder="Área" value={area} onChange={e => setArea(e.target.value)} />
+          <Form.Control type="text" name="area" placeholder="Área" value={formFields.area} onChange={createChangeHandler('area')} />
         </FloatingLabel>
 
         <FloatingLabel className="mb-3" label="E-mail">
-          <Form.Control type="email" name="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
+          <Form.Control type="email" name="email" placeholder="E-mail" value={formFields.email} onChange={createChangeHandler('email')} />
         </FloatingLabel>
 
         <Form.Group className="mb-3">
-          <Form.Check label="Presente?" name="presente" checked={isPresente} onChange={e => setIsPresente(e.target.checked)} />
+          <Form.Check label="Presente?" name="presente" checked={formFields.isPresente} onChange={createChangeHandler('isPresente')} />
         </Form.Group>
       </Modal.Body>
 

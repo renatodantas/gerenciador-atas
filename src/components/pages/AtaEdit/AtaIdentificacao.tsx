@@ -1,29 +1,27 @@
-import { Dispatch, SetStateAction } from "react";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import { UseFormElements } from "../../../utils/useFormField.hook";
+
+type AtaIdentificacaoKeys = "responsavel" | "numero" | "assunto" | "data" | "local" | "horario";
 
 export interface AtaIdentificacaoProps {
-  responsavel: [string, Dispatch<SetStateAction<string>>],
-  numero: [number | null, Dispatch<SetStateAction<number | null>>],
-  assunto: [string, Dispatch<SetStateAction<string>>],
-  data: [string, Dispatch<SetStateAction<string>>],
-  local: [string, Dispatch<SetStateAction<string>>],
-  horario: [string, Dispatch<SetStateAction<string>>],
+  formFields: {
+    responsavel: string,
+    numero: string,
+    assunto: string,
+    data: string,
+    local: string,
+    horario: string,
+  },
+  createChangeHandler: (key: AtaIdentificacaoKeys) => (e: React.ChangeEvent<UseFormElements>) => void;
 }
 
-export const AtaIdentificacao = (props: AtaIdentificacaoProps) => {
-  const [responsavel, setResponsavel] = props.responsavel;
-  const [numero, setNumero] = props.numero;
-  const [assunto, setAssunto] = props.assunto;
-  const [data, setData] = props.data;
-  const [local, setLocal] = props.local;
-  const [horario, setHorario] = props.horario;
-
+export const AtaIdentificacao = ({ formFields, createChangeHandler }: AtaIdentificacaoProps) => {
   return (
     <>
       <Row>
         <Col sm='8'>
           <FloatingLabel controlId="responsavel" label="Responsável" className="mb-2">
-            <Form.Select aria-label="Responsável" value={responsavel} onChange={e => setResponsavel(e.target.value)}>
+            <Form.Select aria-label="Responsável" value={formFields.responsavel} onChange={createChangeHandler("responsavel")}>
               <option value="EQUIPEA">Equipe A</option>
               <option value="EQUIPEB">Equipe B</option>
               <option value="CT-EQUIPE">CT-Equipe</option>
@@ -32,31 +30,31 @@ export const AtaIdentificacao = (props: AtaIdentificacaoProps) => {
         </Col>
         <Col>
           <FloatingLabel className="mb-2" controlId="numero" label="Número">
-            <Form.Control type="number" value={(numero || '')} placeholder="Número" onChange={e => setNumero(+e.target.value || null)} />
+            <Form.Control type="number" value={formFields.numero} placeholder="Número" onChange={createChangeHandler('numero')} />
           </FloatingLabel>
         </Col>
       </Row>
       <Row>
         <Col sm='8'>
           <FloatingLabel className="mb-2" controlId="assunto" label="Assunto">
-            <Form.Control type="text" value={assunto} placeholder="Assunto" onChange={e => setAssunto(e.target.value)} />
+            <Form.Control type="text" value={formFields.assunto} placeholder="Assunto" onChange={createChangeHandler('assunto')} />
           </FloatingLabel>
         </Col>
         <Col>
           <FloatingLabel className="mb-2" controlId="data" label="Data">
-            <Form.Control type="date" value={data} onChange={e => setData(e.target.value)} />
+            <Form.Control type="date" value={formFields.data} onChange={createChangeHandler('data')} />
           </FloatingLabel>
         </Col>
       </Row>
       <Row>
         <Col sm='8'>
           <FloatingLabel className="mb-2" controlId="local" label="Local">
-            <Form.Control type="text" value={local} onChange={e => setLocal(e.target.value)} />
+            <Form.Control type="text" value={formFields.local} onChange={createChangeHandler('local')} />
           </FloatingLabel>
         </Col>
         <Col>
           <FloatingLabel className="mb-2" controlId="horario" label="Horário">
-            <Form.Control type="text" value={horario} onChange={e => setHorario(e.target.value)} />
+            <Form.Control type="text" value={formFields.horario} onChange={createChangeHandler('horario')} />
           </FloatingLabel>
         </Col>
       </Row>

@@ -6,9 +6,10 @@ import { AtaParticipanteModal } from "./AtaParticipanteModal";
 interface AtaParticipantesProps {
   participantes: Participante[];
   onAddParticipante: (p: Participante) => void;
+  onRemoveParticipante: (index: number) => void;
 }
 
-export const AtaParticipantes = ({ participantes, onAddParticipante }: AtaParticipantesProps) => {
+export const AtaParticipantes = ({ participantes, onAddParticipante, onRemoveParticipante }: AtaParticipantesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalHandler = () => setIsModalOpen(true);
   const closeModalHandler = () => setIsModalOpen(false);
@@ -17,7 +18,6 @@ export const AtaParticipantes = ({ participantes, onAddParticipante }: AtaPartic
     console.log('Chegou:', participante);
     onAddParticipante(participante);
   }
-
   return (
     <>
       {participantes.length > 0 && (
@@ -32,14 +32,18 @@ export const AtaParticipantes = ({ participantes, onAddParticipante }: AtaPartic
             </tr>
           </thead>
           <tbody>
-            {participantes.map(p => (
+            {participantes.map((p, index) => (
               <tr key={p.email}>
                 <td>{p.nome}</td>
                 <td>{p.area}</td>
                 <td>{p.email}</td>
                 <td>{p.presente ? 'Sim' : 'Nâo'}</td>
                 <td>
-                  <i className="icone-link bi-x-circle text-danger" title="Excluir"></i>
+                  <i
+                    title="Excluir"
+                    className="icone-link bi-x-circle text-danger"
+                    onClick={() => onRemoveParticipante(index)}>
+                  </i>
                 </td>
               </tr>
             ))}

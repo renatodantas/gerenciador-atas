@@ -21,8 +21,6 @@ export const AtaPautas = ({ pautas, onAddPauta, onRemovePauta }: AtaPautasProps)
     });
   }
 
-  const removePautaHandler = (index: number) => onRemovePauta(index);
-
   return (
     <>
       {pautas.length > 0 && (
@@ -40,7 +38,7 @@ export const AtaPautas = ({ pautas, onAddPauta, onRemovePauta }: AtaPautasProps)
                 <td>{p.indice}</td>
                 <td>{p.topico}</td>
                 <td style={{ width: '50px' }}>
-                  <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => removePautaHandler(index)}></i>
+                  <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => onRemovePauta(index)}></i>
                 </td>
               </tr>
             ))}

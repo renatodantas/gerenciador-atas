@@ -2,7 +2,8 @@ import { FC, useState } from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { Participante } from "../../../models/participante";
 import { Pauta } from "../../../models/pauta";
-import { AtaIdentificacao, AtaIdentificacaoProps } from "./AtaIdentificacao";
+import { useFormFields } from "../../../utils/useFormField.hook";
+import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaParticipantes } from "./AtaParticipantes";
 import { AtaPautas } from "./AtaPautas";
 
@@ -10,20 +11,14 @@ const dataAtual = new Date().toISOString().split('T')[0];
 
 export const AtaEditPage: FC = () => {
 
-  const [responsavel, setResponsavel] = useState('CSAN');
-  const [numero, setNumero] = useState<number | null>(null);
-  const [assunto, setAssunto] = useState('');
-  const [data, setData] = useState(dataAtual);
-  const [local, setLocal] = useState('Virtual via Google Meet');
-  const [horario, setHorario] = useState('');
-  const identificacao: AtaIdentificacaoProps = {
-    responsavel: [responsavel, setResponsavel],
-    numero: [numero, setNumero],
-    assunto: [assunto, setAssunto],
-    data: [data, setData],
-    local: [local, setLocal],
-    horario: [horario, setHorario],
-  }
+  const { formFields, createChangeHandler } = useFormFields({
+    responsavel: '',
+    data: '',
+    numero: '',
+    assunto: '',
+    local: 'Virtual via Google Meet',
+    horario: '',
+  })
 
   const [participantes, setParticipantes] = useState<Participante[]>([]);
   const [pautas, setPautas] = useState<Pauta[]>([]);
@@ -36,8 +31,15 @@ export const AtaEditPage: FC = () => {
     setPautas(current => [...current, pauta])
     console.log('adding pauta:', pauta);
   }
+  const removeParticipante = (index: number) => {
+    const participantesSemIndex = participantes.filter((_, i) => i !== index)
+    setParticipantes(participantesSemIndex)
+    console.log('removing participante:', index)
+  }
   const removePauta = (index: number) => {
-    setPautas(current => current.splice(index, 1))
+    const pautasSemIndex = pautas.filter((_, i) => i !== index)
+    const pautasReindexadas = pautasSemIndex.map((p, i) => ({ ...p, indice: i + 1 }))
+    setPautas(pautasReindexadas)
     console.log('removing pauta:', index);
   }
 
@@ -47,7 +49,7 @@ export const AtaEditPage: FC = () => {
       <Card className="mb-3 shadow">
         <Card.Header>Identificação da Ata</Card.Header>
         <Card.Body>
-          <AtaIdentificacao {...identificacao} />
+          <AtaIdentificacao formFields={formFields} createChangeHandler={createChangeHandler} />
         </Card.Body>
       </Card>
 
@@ -57,6 +59,7 @@ export const AtaEditPage: FC = () => {
           <AtaParticipantes
             participantes={participantes}
             onAddParticipante={addParticipante}
+            onRemoveParticipante={removeParticipante}
           />
         </Card.Body>
       </Card>
