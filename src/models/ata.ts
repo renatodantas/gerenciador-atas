@@ -1,5 +1,5 @@
-import { Pauta } from "./pauta";
 import { Participante } from "./participante";
+import { Pauta } from "./pauta";
 
 export interface Ata {
   id?: number;
@@ -7,8 +7,8 @@ export interface Ata {
   assunto: string;
   local: string;
   numero?: number;
-  data: Date;
+  data: string;
   horario: string;
   participantes: Participante[];
-  assuntos: Pauta[];
+  pautas: Pauta[];
 }
