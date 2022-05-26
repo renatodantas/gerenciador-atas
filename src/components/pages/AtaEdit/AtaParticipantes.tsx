@@ -1,26 +1,41 @@
 import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import { Control, useFieldArray, UseFormRegister } from "react-hook-form";
+import { Ata } from "../../../models/ata";
 import { Participante } from "../../../models/participante";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
 interface AtaParticipantesProps {
-  participantes: Participante[];
-  onAddParticipante: (p: Participante) => void;
-  onRemoveParticipante: (index: number) => void;
+  control: Control<Ata, any>;
+  register: UseFormRegister<Ata>;
+  // onAddParticipante: (p: Participante) => void;
+  // onRemoveParticipante: (index: number) => void;
 }
 
-export const AtaParticipantes = ({ participantes, onAddParticipante, onRemoveParticipante }: AtaParticipantesProps) => {
+export const AtaParticipantes = ({ control, register }: AtaParticipantesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModalHandler = () => setIsModalOpen(true);
-  const closeModalHandler = () => setIsModalOpen(false);
 
-  const addParticipanteHandler = (participante: Participante) => {
-    console.log('Chegou:', participante);
-    onAddParticipante(participante);
+  const { fields, remove, append } = useFieldArray({
+    control,
+    name: 'participantes'
+  });
+
+  const openModalHandler = () => setIsModalOpen(true);
+  const closeModalHandler = (data?: Participante) => {
+    if (data) {
+      append(data);
+    }
+    setIsModalOpen(false);
   }
+
+  // const addParticipanteHandler = (participante: Participante) => {
+  //   console.log('Chegou:', participante);
+  //   onAddParticipante(participante);
+  // }
+
   return (
     <>
-      {participantes.length > 0 && (
+      {fields.length > 0 && (
         <Table size="sm">
           <thead>
             <tr>
@@ -32,24 +47,28 @@ export const AtaParticipantes = ({ participantes, onAddParticipante, onRemovePar
             </tr>
           </thead>
           <tbody>
-            {participantes.map((p, index) => (
-              <tr key={p.email}>
-                <td>{p.nome}</td>
-                <td>{p.area}</td>
-                <td>{p.email}</td>
-                <td>{p.presente ? 'Sim' : 'Nâo'}</td>
+            {fields.map((participante, index) => (
+              <tr key={participante.email}>
+                <td>{participante.nome}</td>
+                <td>{participante.area}</td>
+                <td>{participante.email}</td>
+                <td>{participante.presente ? 'Sim' : 'Não'}</td>
                 <td>
-                  <i
-                    title="Excluir"
-                    className="icone-link bi-x-circle text-danger"
-                    onClick={() => onRemoveParticipante(index)}>
-                  </i>
+                  <div className="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+                    <button type="button" className="btn btn-outline-light" onClick={() => remove(index)}>
+                      <i title="Excluir" className="bi-pencil-square text-primary"></i>
+                    </button>
+                    <button type="button" className="btn btn-outline-light">
+                      <i title="Excluir" className="bi-x-circle text-danger"></i>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
-      )}
+      )
+      }
 
       <Button variant="primary" size="sm" onClick={openModalHandler}>
         Adicionar
@@ -58,7 +77,6 @@ export const AtaParticipantes = ({ participantes, onAddParticipante, onRemovePar
       <AtaParticipanteModal
         openModal={isModalOpen}
         onClose={closeModalHandler}
-        onAddParticipante={addParticipanteHandler}
       />
     </>
   )

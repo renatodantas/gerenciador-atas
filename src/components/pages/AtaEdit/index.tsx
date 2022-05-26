@@ -8,9 +8,18 @@ import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaParticipantes } from "./AtaParticipantes";
 import { AtaPautas } from "./AtaPautas";
 
+const dataAtual = new Date().toISOString().substring(0, 10);
+
 export const AtaEditPage: FC = () => {
 
-  const { control, register, handleSubmit } = useForm<Ata>();
+  const { control, register, handleSubmit } = useForm<Ata>({
+    defaultValues: {
+      data: dataAtual,
+      local: 'Virtual (Google Meet)',
+      participantes: [],
+      pautas: []
+    }
+  });
 
   // const [participantes, setParticipantes] = useState<Participante[]>([]);
   // const [pautas, setPautas] = useState<Pauta[]>([]);
@@ -49,11 +58,7 @@ export const AtaEditPage: FC = () => {
         <Card className="mb-3 shadow">
           <Card.Header>Participantes</Card.Header>
           <Card.Body>
-            <AtaParticipantes
-              participantes={[]}
-              onAddParticipante={addParticipante}
-              onRemoveParticipante={removeParticipante}
-            />
+            <AtaParticipantes {...{ control, register }} />
           </Card.Body>
         </Card>
 
