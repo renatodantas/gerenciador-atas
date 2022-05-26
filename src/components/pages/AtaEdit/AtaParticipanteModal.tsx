@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Participante } from "../../../models/participante";
 
 interface AtaParticipanteModalProps {
+  participante: Participante;
   openModal: boolean;
   onClose: (dados?: Participante) => void;
 }
@@ -14,18 +15,22 @@ const LabelCampoObrigatorio = () => (
   </Form.Control.Feedback>
 )
 
-export const AtaParticipanteModal = ({ openModal, onClose }: AtaParticipanteModalProps) => {
+export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaParticipanteModalProps) => {
   // const [isPresente, setIsPresente] = useState(true);
-  const { register, handleSubmit, formState: { errors } } = useForm<Participante>({
-    shouldUnregister: true,
-    defaultValues: { presente: true }
-  });
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<Participante>({ shouldUnregister: true });
+  // reset(participante);
 
   useEffect(() => {
-    console.log('atualizou');
-  }, [])
+    console.log('Modal => Montou', openModal);
+    return () => {
+      console.log('Modal => Desmontou', openModal);
+    }
+  })
 
-  const submitHandler = handleSubmit(data => onClose(data));
+  const submitHandler = handleSubmit(data => {
+    onClose(data);
+    reset();
+  });
 
   return (
     <Modal show={openModal} onHide={onClose}>

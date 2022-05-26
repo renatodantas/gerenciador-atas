@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Control, useFieldArray, UseFormRegister } from "react-hook-form";
 import { Ata } from "../../../models/ata";
-import { Participante } from "../../../models/participante";
+import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
 interface AtaParticipantesProps {
@@ -12,26 +12,29 @@ interface AtaParticipantesProps {
   // onRemoveParticipante: (index: number) => void;
 }
 
+const defaultValues = { ...PARTICIPANTE_DEFAULT_VALUES };
+
 export const AtaParticipantes = ({ control, register }: AtaParticipantesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [participanteSelecionado, setParticipanteSelecionado] = useState(defaultValues);
+  const { fields, remove, append } = useFieldArray({ control, name: 'participantes' });
 
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'participantes'
-  });
-
-  const openModalHandler = () => setIsModalOpen(true);
+  // Handlers
+  const novoParticipanteHandler = () => {
+    setParticipanteSelecionado(defaultValues);
+    setIsModalOpen(true);
+  }
   const closeModalHandler = (data?: Participante) => {
-    if (data) {
-      append(data);
-    }
+    data && append(data);
     setIsModalOpen(false);
   }
-
-  // const addParticipanteHandler = (participante: Participante) => {
-  //   console.log('Chegou:', participante);
-  //   onAddParticipante(participante);
-  // }
+  const editarParticipanteHandler = (participante: Participante) => {
+    setParticipanteSelecionado(participante);
+    setIsModalOpen(true);
+  }
+  const removerParticipanteHandler = (index: number) => {
+    remove(index);
+  }
 
   return (
     <>
@@ -55,10 +58,18 @@ export const AtaParticipantes = ({ control, register }: AtaParticipantesProps) =
                 <td>{participante.presente ? 'Sim' : 'Não'}</td>
                 <td>
                   <div className="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                    <button type="button" className="btn btn-outline-light" onClick={() => remove(index)}>
-                      <i title="Excluir" className="bi-pencil-square text-primary"></i>
+                    <button
+                      type="button"
+                      className="btn btn-outline-light"
+                      onClick={() => editarParticipanteHandler(participante)}
+                    >
+                      <i title="Alterar" className="bi-pencil-square text-primary"></i>
                     </button>
-                    <button type="button" className="btn btn-outline-light">
+                    <button
+                      type="button"
+                      className="btn btn-outline-light"
+                      onClick={() => removerParticipanteHandler(index)}
+                    >
                       <i title="Excluir" className="bi-x-circle text-danger"></i>
                     </button>
                   </div>
@@ -70,11 +81,12 @@ export const AtaParticipantes = ({ control, register }: AtaParticipantesProps) =
       )
       }
 
-      <Button variant="primary" size="sm" onClick={openModalHandler}>
+      <Button variant="primary" size="sm" onClick={novoParticipanteHandler}>
         Adicionar
       </Button>
 
       <AtaParticipanteModal
+        participante={participanteSelecionado}
         openModal={isModalOpen}
         onClose={closeModalHandler}
       />
