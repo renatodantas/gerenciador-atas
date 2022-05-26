@@ -11,7 +11,10 @@ interface AtaParticipanteModalProps {
 
 export const AtaParticipanteModal = ({ openModal, onClose, onAddParticipante }: AtaParticipanteModalProps) => {
   // const [isPresente, setIsPresente] = useState(true);
-  const { register, handleSubmit } = useForm<Participante>({ shouldUnregister: true });
+  const { register, handleSubmit } = useForm<Participante>({
+    shouldUnregister: true,
+    defaultValues: { presente: true }
+  });
 
   useEffect(() => {
     console.log('atualizou');
