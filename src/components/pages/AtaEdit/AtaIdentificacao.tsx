@@ -1,14 +1,10 @@
+import { FC } from "react";
 import { Col, FloatingLabel, Form, Row } from "react-bootstrap";
-import { UseFormRegister } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Ata } from "../../../models/ata";
 
-type AtaIdentificacaoKeys = "responsavel" | "numero" | "assunto" | "data" | "local" | "horario";
-
-export interface AtaIdentificacaoProps {
-  register: UseFormRegister<Ata>,
-}
-
-export const AtaIdentificacao = ({ register }: AtaIdentificacaoProps) => {
+export const AtaIdentificacao: FC = () => {
+  const { register } = useFormContext<Ata>();
   return (
     <>
       <Row>

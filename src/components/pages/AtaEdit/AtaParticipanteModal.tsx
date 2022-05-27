@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
+import { Ata } from "../../../models/ata";
 import { Participante } from "../../../models/participante";
 
 interface AtaParticipanteModalProps {
-  participante: Participante;
-  openModal: boolean;
+  indexParticipante: number;
+  isOpen: boolean;
   onClose: (dados?: Participante) => void;
 }
 
@@ -15,25 +16,22 @@ const LabelCampoObrigatorio = () => (
   </Form.Control.Feedback>
 )
 
-export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaParticipanteModalProps) => {
-  // const [isPresente, setIsPresente] = useState(true);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<Participante>({ shouldUnregister: true });
-  // reset(participante);
+export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: AtaParticipanteModalProps) => {
+  const { register, reset, /*formState: { errors }*/ } = useFormContext<Ata>();
+  const errors: any = {}; // Verificar como validar erros via useFieldArray
 
   useEffect(() => {
-    console.log('Modal => Montou', openModal);
-    return () => {
-      console.log('Modal => Desmontou', openModal);
-    }
-  })
+    //if (isOpen) reset(participante);
+  }, [isOpen])
 
-  const submitHandler = handleSubmit(data => {
-    onClose(data);
-    reset();
-  });
+  // const submitHandler = handleSubmit(data => onClose(data));
+  const submitHandler = () => {
+    console.log('submeteu');
+    onClose();
+  }
 
   return (
-    <Modal show={openModal} onHide={onClose}>
+    <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Adicionar Participante</Modal.Title>
       </Modal.Header>
@@ -44,7 +42,7 @@ export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaPa
             type="text"
             placeholder="Nome"
             className={errors.nome && 'is-invalid'}
-            {...register("nome", { required: true })}
+            {...register(`participantes.${indexParticipante}.nome`, { required: true })}
           />
           <LabelCampoObrigatorio />
         </FloatingLabel>
@@ -54,7 +52,7 @@ export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaPa
             type="text"
             placeholder="Área"
             className={errors.area && 'is-invalid'}
-            {...register("area", { required: true })}
+            {...register(`participantes.${indexParticipante}.area`, { required: true })}
           />
           <LabelCampoObrigatorio />
         </FloatingLabel>
@@ -64,7 +62,7 @@ export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaPa
             type="email"
             placeholder="E-mail"
             className={errors.area && 'is-invalid'}
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+            {...register(`participantes.${indexParticipante}.email`, { required: true, pattern: /^\S+@\S+$/i })}
           />
           <Form.Control.Feedback type="invalid">
             {errors.email?.type === 'pattern' && 'E-mail inválido'}
@@ -73,7 +71,7 @@ export const AtaParticipanteModal = ({ participante, openModal, onClose }: AtaPa
         </FloatingLabel>
 
         <Form.Group className="mb-3">
-          <Form.Check label="Presente?" {...register("presente")} />
+          <Form.Check label="Presente?" {...register(`participantes.${indexParticipante}.presente`)} />
         </Form.Group>
       </Modal.Body>
 

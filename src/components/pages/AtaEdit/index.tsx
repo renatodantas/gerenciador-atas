@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button, Card, Container } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { Ata } from "../../../models/ata";
 import { Participante } from "../../../models/participante";
 import { Pauta } from "../../../models/pauta";
@@ -12,7 +12,7 @@ const dataAtual = new Date().toISOString().substring(0, 10);
 
 export const AtaEditPage: FC = () => {
 
-  const { control, register, handleSubmit } = useForm<Ata>({
+  const formMethods = useForm<Ata>({
     defaultValues: {
       data: dataAtual,
       local: 'Virtual (Google Meet)',
@@ -42,38 +42,41 @@ export const AtaEditPage: FC = () => {
     // setState({ pautas: pautasReindexadas })
   }
 
-  const salvarAta = handleSubmit(data => console.log(data));
+  const salvarAta = formMethods.handleSubmit(data => console.log(data));
 
   return (
     <Container className="w-50">
       <h3>Nova Ata</h3>
-      <form onSubmit={salvarAta}>
-        <Card className="mb-3 shadow">
-          <Card.Header>Identificação da Ata</Card.Header>
-          <Card.Body>
-            <AtaIdentificacao register={register} />
-          </Card.Body>
-        </Card>
 
-        <Card className="mb-3 shadow">
-          <Card.Header>Participantes</Card.Header>
-          <Card.Body>
-            <AtaParticipantes {...{ control, register }} />
-          </Card.Body>
-        </Card>
+      <FormProvider {...formMethods}>
+        <form onSubmit={salvarAta}>
+          <Card className="mb-3 shadow">
+            <Card.Header>Identificação da Ata</Card.Header>
+            <Card.Body>
+              <AtaIdentificacao />
+            </Card.Body>
+          </Card>
 
-        <Card className="mb-3 shadow">
-          <Card.Header>Pautas</Card.Header>
-          <Card.Body>
-            <AtaPautas pautas={[]} onAddPauta={addPauta} onRemovePauta={removePauta} />
-          </Card.Body>
-        </Card>
+          <Card className="mb-3 shadow">
+            <Card.Header>Participantes</Card.Header>
+            <Card.Body>
+              <AtaParticipantes />
+            </Card.Body>
+          </Card>
 
-        <Button variant="primary" type="submit">
-          <i className="icone-link bi-save-fill" title="Excluir"></i>
-          Salvar
-        </Button>
-      </form>
+          <Card className="mb-3 shadow">
+            <Card.Header>Pautas</Card.Header>
+            <Card.Body>
+              <AtaPautas pautas={[]} onAddPauta={addPauta} onRemovePauta={removePauta} />
+            </Card.Body>
+          </Card>
+
+          <Button variant="primary" type="submit">
+            <i className="icone-link bi-save-fill" title="Excluir"></i>
+            Salvar
+          </Button>
+        </form>
+      </FormProvider>
     </Container>
   )
 }
