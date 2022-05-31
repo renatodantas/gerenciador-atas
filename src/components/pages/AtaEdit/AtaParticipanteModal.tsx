@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { useFormContext } from "react-hook-form";
 import { Ata } from "../../../models/ata";
@@ -17,15 +17,17 @@ const LabelCampoObrigatorio = () => (
 )
 
 export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: AtaParticipanteModalProps) => {
-  const { register, reset, /*formState: { errors }*/ } = useFormContext<Ata>();
+  const { register, reset, watch, getValues /*formState: { errors }*/ } = useFormContext<Ata>();
   const errors: any = {}; // Verificar como validar erros via useFieldArray
 
-  useEffect(() => {
-    //if (isOpen) reset(participante);
-  }, [isOpen])
+  // useEffect(() => {
+  //   const subscription = watch((value, { name, type }) => console.log(value.participantes, name, type));
+  //   return () => subscription.unsubscribe();
+  // }, [watch, isOpen])
 
   // const submitHandler = handleSubmit(data => onClose(data));
   const submitHandler = () => {
+    console.log(getValues('participantes'));
     console.log('submeteu');
     onClose();
   }
@@ -42,7 +44,7 @@ export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: Ata
             type="text"
             placeholder="Nome"
             className={errors.nome && 'is-invalid'}
-            {...register(`participantes.${indexParticipante}.nome`, { required: true })}
+            {...register(`participantes.${indexParticipante}.nome` as const, { required: true })}
           />
           <LabelCampoObrigatorio />
         </FloatingLabel>
@@ -52,7 +54,7 @@ export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: Ata
             type="text"
             placeholder="Área"
             className={errors.area && 'is-invalid'}
-            {...register(`participantes.${indexParticipante}.area`, { required: true })}
+            {...register(`participantes.${indexParticipante}.area` as const, { required: true })}
           />
           <LabelCampoObrigatorio />
         </FloatingLabel>
@@ -62,7 +64,7 @@ export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: Ata
             type="email"
             placeholder="E-mail"
             className={errors.area && 'is-invalid'}
-            {...register(`participantes.${indexParticipante}.email`, { required: true, pattern: /^\S+@\S+$/i })}
+            {...register(`participantes.${indexParticipante}.email` as const, { required: true, pattern: /^\S+@\S+$/i })}
           />
           <Form.Control.Feedback type="invalid">
             {errors.email?.type === 'pattern' && 'E-mail inválido'}

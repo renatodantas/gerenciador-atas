@@ -6,10 +6,10 @@ import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/parti
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
 export const AtaParticipantes: FC = () => {
-  const { control } = useFormContext<Ata>();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { fields, remove, append } = useFieldArray({ control, name: 'participantes' });
   const [indexParticipante, setIndexParticipante] = useState(-1);
+  const { control, getValues } = useFormContext<Ata>();
+  const { fields, remove, append } = useFieldArray({ control, name: 'participantes' });
 
   // Handlers
   const novoParticipanteHandler = () => {
@@ -27,7 +27,9 @@ export const AtaParticipantes: FC = () => {
     setIsModalOpen(true);
   }
   const removerParticipanteHandler = (index: number) => {
+    console.log('Removendo participante:', index);
     remove(index);
+    // getValues('participantes')
   }
 
   return (
@@ -44,6 +46,7 @@ export const AtaParticipantes: FC = () => {
             </tr>
           </thead>
           <tbody>
+            {false || console.log('Fields:', fields)}
             {fields.map((participante, index) => (
               <tr key={participante.email}>
                 <td>{participante.nome}</td>
