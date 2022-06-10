@@ -2,24 +2,25 @@ import { FC, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Ata } from "../../../models/ata";
-import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
+import { Participante } from "../../../models/participante";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
 export const AtaParticipantes: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [indexParticipante, setIndexParticipante] = useState(-1);
+  const [indexParticipante, setIndexParticipante] = useState(0);
   const { control, getValues } = useFormContext<Ata>();
   const { fields, remove, append } = useFieldArray({ control, name: 'participantes' });
 
   // Handlers
   const novoParticipanteHandler = () => {
     // setParticipanteSelecionado(defaultValues);
-    append({ ...PARTICIPANTE_DEFAULT_VALUES });
-    setIndexParticipante(oldIndex => oldIndex + 1);
+    // append({ ...PARTICIPANTE_DEFAULT_VALUES });
+    // setIndexParticipante(oldIndex => oldIndex + 1);
     setIsModalOpen(true);
   }
   const closeModalHandler = (data?: Participante) => {
     if (data) append(data);
+    setIndexParticipante(oldIndex => oldIndex + 1)
     setIsModalOpen(false);
   }
   const editarParticipanteHandler = (index: number) => {

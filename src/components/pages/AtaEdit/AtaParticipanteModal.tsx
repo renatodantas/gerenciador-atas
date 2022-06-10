@@ -27,7 +27,7 @@ export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: Ata
 
   // const submitHandler = handleSubmit(data => onClose(data));
   const submitHandler = () => {
-    console.log(getValues('participantes'));
+    console.log('lista', getValues('participantes'));
     console.log('submeteu');
     onClose();
   }
@@ -35,7 +35,7 @@ export const AtaParticipanteModal = ({ indexParticipante, isOpen, onClose }: Ata
   return (
     <Modal show={isOpen} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Adicionar Participante</Modal.Title>
+        <Modal.Title>Adicionar Participante (index: {indexParticipante})</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
