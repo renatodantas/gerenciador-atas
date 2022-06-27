@@ -2,36 +2,45 @@ import { FC, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Ata } from "../../../models/ata";
-import { Participante } from "../../../models/participante";
+import { PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 
 export const AtaParticipantes: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [indexParticipante, setIndexParticipante] = useState(0);
+  const [isNovoParticipante, setIsNovoParticipante] = useState(false);
   const { control, getValues } = useFormContext<Ata>();
   const { fields, remove, append } = useFieldArray({ control, name: 'participantes' });
 
   // Handlers
   const novoParticipanteHandler = () => {
     // setParticipanteSelecionado(defaultValues);
-    // append({ ...PARTICIPANTE_DEFAULT_VALUES });
-    // setIndexParticipante(oldIndex => oldIndex + 1);
+    append({ ...PARTICIPANTE_DEFAULT_VALUES });
+    setIsNovoParticipante(true);
+    setIndexParticipante(getValues('participantes').length - 1);
     setIsModalOpen(true);
-  }
-  const closeModalHandler = (data?: Participante) => {
-    if (data) append(data);
-    setIndexParticipante(oldIndex => oldIndex + 1)
-    setIsModalOpen(false);
   }
   const editarParticipanteHandler = (index: number) => {
-    // setParticipanteSelecionado(participante);
+    setIsNovoParticipante(false);
+    setIndexParticipante(index);
     setIsModalOpen(true);
+  }
+  const cancelarEdicaoHandler = () => {
+    if (isNovoParticipante) {
+      remove(indexParticipante);
+    }
+    setIsModalOpen(false);
+  }
+  const salvarParticipanteHandler = () => {
+    console.log('salvando...');
+    setIsModalOpen(false);
   }
   const removerParticipanteHandler = (index: number) => {
     console.log('Removendo participante:', index);
     remove(index);
-    // getValues('participantes')
   }
+
+  console.log('qtos participantes?', getValues('participantes'));
 
   return (
     <>
@@ -47,13 +56,12 @@ export const AtaParticipantes: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {false || console.log('Fields:', fields)}
-            {fields.map((participante, index) => (
-              <tr key={participante.email}>
-                <td>{participante.nome}</td>
-                <td>{participante.area}</td>
-                <td>{participante.email}</td>
-                <td>{participante.presente ? 'Sim' : 'Não'}</td>
+            {fields.map((field, index) => (
+              <tr key={field.id}>
+                <td>{field.nome}</td>
+                <td>{field.area}</td>
+                <td>{field.email}</td>
+                <td>{field.presente ? 'Sim' : 'Não'}</td>
                 <td>
                   <div className="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
                     <button
@@ -83,11 +91,14 @@ export const AtaParticipantes: FC = () => {
         Adicionar
       </Button>
 
-      <AtaParticipanteModal
-        indexParticipante={indexParticipante}
-        isOpen={isModalOpen}
-        onClose={closeModalHandler}
-      />
+      {isModalOpen &&
+        <AtaParticipanteModal
+          indexParticipante={indexParticipante}
+          isOpen={isModalOpen}
+          onSave={salvarParticipanteHandler}
+          onCancel={cancelarEdicaoHandler}
+        />
+      }
     </>
   )
 }

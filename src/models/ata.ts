@@ -12,3 +12,13 @@ export interface Ata {
   participantes: Participante[];
   pautas: Pauta[];
 }
+
+export const ATA_DEFAULT_VALUE: Ata = {
+  responsavel: '',
+  assunto: '',
+  horario: '',
+  data: new Date().toISOString().substring(0, 10),
+  local: 'Virtual (Google Meet)',
+  participantes: [],
+  pautas: []
+}

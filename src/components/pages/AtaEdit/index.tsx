@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
-import { Ata } from "../../../models/ata";
+import { Ata, ATA_DEFAULT_VALUE } from "../../../models/ata";
 import { Participante } from "../../../models/participante";
 import { Pauta } from "../../../models/pauta";
 import { AtaIdentificacao } from "./AtaIdentificacao";
@@ -10,15 +10,11 @@ import { AtaPautas } from "./AtaPautas";
 
 const dataAtual = new Date().toISOString().substring(0, 10);
 
+
 export const AtaEditPage: FC = () => {
 
   const formMethods = useForm<Ata>({
-    defaultValues: {
-      data: dataAtual,
-      local: 'Virtual (Google Meet)',
-      participantes: [],
-      pautas: []
-    }
+    defaultValues: { ...ATA_DEFAULT_VALUE }
   });
 
   // const [participantes, setParticipantes] = useState<Participante[]>([]);
