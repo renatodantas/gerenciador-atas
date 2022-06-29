@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button, Card, Container } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import { Ata, ATA_DEFAULT_VALUE } from "../../../models/ata";
-import { Participante } from "../../../models/participante";
+import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
 import { Pauta } from "../../../models/pauta";
 import { AtaIdentificacao } from "./AtaIdentificacao";
+import { AtaParticipanteModal } from "./AtaParticipanteModal";
 import { AtaParticipantes } from "./AtaParticipantes";
 import { AtaPautas } from "./AtaPautas";
 
@@ -17,13 +18,34 @@ export const AtaEditPage: FC = () => {
     defaultValues: { ...ATA_DEFAULT_VALUE }
   });
 
+  const [isModalParticipanteOpen, setIsModalParticipanteOpen] = useState(false);
+  const [participante, setParticipante] = useState<Participante>({ ...PARTICIPANTE_DEFAULT_VALUES });
+
   // const [participantes, setParticipantes] = useState<Participante[]>([]);
   // const [pautas, setPautas] = useState<Pauta[]>([]);
 
-  const addParticipante = (participante: Participante) => {
-    // const participantes = [...state.participantes, participante];
-    // setState({ participantes })
+  const salvarAta = formMethods.handleSubmit(data => console.log(data));
+
+  // Handlers: participante
+  const novoParticipanteHandler = () => {
+    setParticipante({ ...PARTICIPANTE_DEFAULT_VALUES });
+    setIsModalParticipanteOpen(true);
   }
+  const editarParticipanteHandler = (index: number) => {
+    console.log('editando', index);
+  }
+  const removerParticipanteHandler = (index: number) => {
+    console.log('removendo...', index);
+  }
+  const salvarParticipanteHandler = (dados: Participante) => {
+    console.log('Salvar participante:', dados);
+    setIsModalParticipanteOpen(false);
+  }
+  const cancelarEdicaoParticipanteHandler = () => {
+    setIsModalParticipanteOpen(false);
+  }
+
+  // Handlers: pauta
   const addPauta = (pauta: Pauta) => {
     // const pautas = [...state.pautas, pauta];
     // setState({ pautas });
@@ -37,8 +59,6 @@ export const AtaEditPage: FC = () => {
     // const pautasReindexadas = pautasSemIndex.map((p, i) => ({ ...p, indice: i + 1 }))
     // setState({ pautas: pautasReindexadas })
   }
-
-  const salvarAta = formMethods.handleSubmit(data => console.log(data));
 
   return (
     <Container className="w-50">
@@ -56,7 +76,11 @@ export const AtaEditPage: FC = () => {
           <Card className="mb-3 shadow">
             <Card.Header>Participantes</Card.Header>
             <Card.Body>
-              <AtaParticipantes />
+              <AtaParticipantes
+                onNovoParticipanteClick={novoParticipanteHandler}
+                onEditarParticipanteClick={editarParticipanteHandler}
+                onRemoverParticipanteClick={removerParticipanteHandler}
+              />
             </Card.Body>
           </Card>
 
@@ -73,6 +97,13 @@ export const AtaEditPage: FC = () => {
           </Button>
         </form>
       </FormProvider>
+
+      <AtaParticipanteModal
+        data={participante}
+        isOpen={isModalParticipanteOpen}
+        onSave={salvarParticipanteHandler}
+        onCancel={cancelarEdicaoParticipanteHandler}
+      />
     </Container>
   )
 }
