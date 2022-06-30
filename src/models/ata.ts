@@ -13,7 +13,7 @@ export interface Ata {
   pautas: Pauta[];
 }
 
-export const ATA_DEFAULT_VALUE: Ata = {
+export const ATA_DEFAULT_VALUES: Ata = {
   responsavel: '',
   assunto: '',
   horario: '',

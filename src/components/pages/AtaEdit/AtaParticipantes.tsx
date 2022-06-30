@@ -1,22 +1,23 @@
 import { Button, Table } from "react-bootstrap";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { Ata } from "../../../models/ata";
+import { Participante } from "../../../models/participante";
 
 interface AtaParticipantesProps {
+  items: Participante[];
   onNovoParticipanteClick: () => void;
   onEditarParticipanteClick: (index: number) => void;
   onRemoverParticipanteClick: (index: number) => void;
 }
 
-export const AtaParticipantes = ({ onNovoParticipanteClick, onEditarParticipanteClick, onRemoverParticipanteClick }: AtaParticipantesProps) => {
-  const { control, getValues } = useFormContext<Ata>();
-  const { fields } = useFieldArray({ control, name: 'participantes' });
-
-  console.log('Passou por aqui:', getValues('participantes'));
+export const AtaParticipantes = ({
+  items,
+  onNovoParticipanteClick,
+  onEditarParticipanteClick,
+  onRemoverParticipanteClick
+}: AtaParticipantesProps) => {
 
   return (
     <>
-      {fields.length > 0 && (
+      {items.length > 0 && (
         <Table size="sm">
           <thead>
             <tr>
@@ -28,12 +29,12 @@ export const AtaParticipantes = ({ onNovoParticipanteClick, onEditarParticipante
             </tr>
           </thead>
           <tbody>
-            {fields.map((fields, index) => (
+            {items.map((item, index) => (
               <tr key={index}>
-                <td>{fields.nome}</td>
-                <td>{fields.area}</td>
-                <td>{fields.email}</td>
-                <td>{fields.presente ? 'Sim' : 'Não'}</td>
+                <td>{item.nome}</td>
+                <td>{item.area}</td>
+                <td>{item.email}</td>
+                <td>{item.presente ? 'Sim' : 'Não'}</td>
                 <td>
                   <div className="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
                     <button
