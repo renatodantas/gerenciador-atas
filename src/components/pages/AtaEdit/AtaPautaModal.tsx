@@ -1,19 +1,19 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Button, FloatingLabel, Form, Modal, Table } from "react-bootstrap";
 import { Pauta } from "../../../models/pauta";
 import { TheEditor } from "../../common/Editor";
 
 interface AtaPautaModalProps {
-  openModal: boolean;
-  onClose: () => void;
-  onAddPauta: (p: Pauta) => void;
+  data: Pauta;
+  isOpen: boolean;
+  onSave: (data: Pauta) => void;
+  onCancel: () => void;
 }
 
-export const AtaPautaModal = ({ openModal, onClose, onAddPauta }: AtaPautaModalProps) => {
-  const [topico, setTopico] = useState('');
-  //const [descricao, setDescricao] = useState(() => EditorState.createEmpty(),);
-  const [deliberacao, setDeliberacao] = useState('');
-  const [deliberacoes, setDeliberacoes] = useState<string[]>([]);
+export const AtaPautaModal = ({ data, isOpen, onSave, onCancel }: AtaPautaModalProps) => {
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<Pauta>();
+  const onSubmit = (submittedData: any) => onSave(submittedData);
+  useEffect(() => reset(data), [data]);
 
   const limparCampos = () => {
     setTopico('');

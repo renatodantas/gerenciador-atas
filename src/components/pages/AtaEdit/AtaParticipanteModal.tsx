@@ -6,7 +6,6 @@ import { Participante } from "../../../models/participante";
 interface AtaParticipanteModalProps {
   data: Participante;
   isOpen: boolean;
-  //onSave: (dados?: Participante) => void;
   onSave: (data: Participante) => void;
   onCancel: () => void;
 }
@@ -19,16 +18,8 @@ const LabelCampoObrigatorio = () => (
 
 export const AtaParticipanteModal = ({ data, isOpen, onSave, onCancel }: AtaParticipanteModalProps) => {
   const { register, reset, handleSubmit, formState: { errors } } = useForm<Participante>();
-
-  useEffect(() => reset(data), [data]);
-  // const errors: any = {}; // Verificar como validar erros via useFieldArray
-
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) => console.log(value.participantes, name, type));
-  //   return () => subscription.unsubscribe();
-  // }, [watch, isOpen])
-
   const onSubmit = (submittedData: any) => onSave(submittedData);
+  useEffect(() => reset(data), [data]);
 
   return (
     <Modal show={isOpen} onHide={onCancel}>

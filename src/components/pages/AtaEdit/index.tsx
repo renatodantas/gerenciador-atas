@@ -8,6 +8,7 @@ import { Pauta } from "../../../models/pauta";
 import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 import { AtaParticipantes } from "./AtaParticipantes";
+import { AtaPautaModal } from "./AtaPautaModal";
 import { AtaPautas } from "./AtaPautas";
 
 // const dataAtual = new Date().toISOString().substring(0, 10);
@@ -121,6 +122,13 @@ export const AtaEditPage: FC = () => {
         isOpen={isModalParticipanteOpen}
         onSave={salvarParticipanteHandler}
         onCancel={cancelarEdicaoParticipanteHandler}
+      />
+
+      <AtaPautaModal
+        data={pautas}
+        isOpen={isModalPautaOpen}
+        onSave={closeModalHandler}
+        onCancel={addPautaHandler}
       />
     </Container>
   )

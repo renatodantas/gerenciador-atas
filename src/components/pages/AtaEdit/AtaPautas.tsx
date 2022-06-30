@@ -1,18 +1,14 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { Pauta } from "../../../models/pauta";
-import { AtaPautaModal } from "./AtaPautaModal";
 
 interface AtaPautasProps {
-  pautas: Pauta[];
-  onAddPauta: (p: Pauta) => void;
-  onRemovePauta: (index: number) => void;
+
 }
 
-export const AtaPautas = ({ pautas, onAddPauta, onRemovePauta }: AtaPautasProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModalHandler = () => setIsModalOpen(true);
-  const closeModalHandler = () => setIsModalOpen(false);
+export const AtaPautas = ({ }: AtaPautasProps) => {
+
 
   const addPautaHandler = (pauta: Pauta) => {
     onAddPauta({
@@ -49,12 +45,6 @@ export const AtaPautas = ({ pautas, onAddPauta, onRemovePauta }: AtaPautasProps)
       <Button variant="primary" size="sm" onClick={openModalHandler}>
         Adicionar
       </Button>
-
-      <AtaPautaModal
-        openModal={isModalOpen}
-        onClose={closeModalHandler}
-        onAddPauta={addPautaHandler}
-      />
     </>
   )
 }
