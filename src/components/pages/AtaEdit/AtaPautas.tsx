@@ -1,25 +1,23 @@
-import { useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
-import { useForm } from "react-hook-form";
 import { Pauta } from "../../../models/pauta";
 
 interface AtaPautasProps {
-
+  items: Pauta[];
+  onNovaPautaClick: () => void;
+  onEditarPautaClick: (index: number) => void;
+  onRemoverPautaClick: (index: number) => void;
 }
 
-export const AtaPautas = ({ }: AtaPautasProps) => {
-
-
-  const addPautaHandler = (pauta: Pauta) => {
-    onAddPauta({
-      ...pauta,
-      indice: pautas.length + 1,
-    });
-  }
+export const AtaPautas = ({
+  items,
+  onNovaPautaClick,
+  onEditarPautaClick,
+  onRemoverPautaClick
+}: AtaPautasProps) => {
 
   return (
     <>
-      {pautas.length > 0 && (
+      {items.length > 0 && (
         <Table size="sm">
           <thead>
             <tr>
@@ -29,20 +27,33 @@ export const AtaPautas = ({ }: AtaPautasProps) => {
             </tr>
           </thead>
           <tbody>
-            {pautas.map((p, index) => (
+            {items.map((p, index) => (
               <tr key={p.indice}>
                 <td>{p.indice}</td>
                 <td>{p.topico}</td>
-                <td style={{ width: '50px' }}>
-                  <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => onRemovePauta(index)}></i>
-                </td>
+                <div className="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
+                  <button
+                    type="button"
+                    className="btn btn-outline-light"
+                    onClick={() => onEditarPautaClick(index)}
+                  >
+                    <i title="Alterar" className="bi-pencil-square text-primary"></i>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-light"
+                    onClick={() => onRemoverPautaClick(index)}
+                  >
+                    <i title="Excluir" className="bi-x-circle text-danger"></i>
+                  </button>
+                </div>
               </tr>
             ))}
           </tbody>
         </Table>
       )}
 
-      <Button variant="primary" size="sm" onClick={openModalHandler}>
+      <Button variant="primary" size="sm" onClick={onNovaPautaClick}>
         Adicionar
       </Button>
     </>

@@ -26,7 +26,9 @@ export const AtaEditPage: FC = () => {
 
   const [isModalParticipanteOpen, setIsModalParticipanteOpen] = useState(false);
   const [participante, setParticipante] = useState<Participante>({ ...PARTICIPANTE_DEFAULT_VALUES });
+  const [pauta, setPauta] = useState<Pauta>({ ...PAUTA_DEFAULT_VALUES });
   const participantes = getValues('participantes');
+  const pautas = getValues('pautas');
 
   // ------ Handlers: participante ------
   const novoParticipanteHandler = () => {
