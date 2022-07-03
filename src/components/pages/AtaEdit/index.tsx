@@ -4,7 +4,7 @@ import { Button, Card, Container } from "react-bootstrap";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { Ata, ATA_DEFAULT_VALUES } from "../../../models/ata";
 import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
-import { Pauta } from "../../../models/pauta";
+import { Pauta, PAUTA_DEFAULT_VALUE } from "../../../models/pauta";
 import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 import { AtaParticipantes } from "./AtaParticipantes";
@@ -22,15 +22,18 @@ export const AtaEditPage: FC = () => {
     append: addParticipante,
     remove: removeParticipante,
     update: editParticipante
-  } = useFieldArray({ control, name: 'participantes' })
+  } = useFieldArray({ control, name: 'participantes' });
+  const {
+    append: addPauta,
+    remove: removePauta,
+    update: editPauta
+  } = useFieldArray({ control, name: 'pautas' });
 
+  // ------ Handlers: participantes ------
   const [isModalParticipanteOpen, setIsModalParticipanteOpen] = useState(false);
   const [participante, setParticipante] = useState<Participante>({ ...PARTICIPANTE_DEFAULT_VALUES });
-  const [pauta, setPauta] = useState<Pauta>({ ...PAUTA_DEFAULT_VALUES });
   const participantes = getValues('participantes');
-  const pautas = getValues('pautas');
 
-  // ------ Handlers: participante ------
   const novoParticipanteHandler = () => {
     setParticipante({ ...PARTICIPANTE_DEFAULT_VALUES });
     setIsModalParticipanteOpen(true);
@@ -42,14 +45,14 @@ export const AtaEditPage: FC = () => {
   const removerParticipanteHandler = (index: number) => {
     removeParticipante(index);
   }
-  const salvarParticipanteHandler = (dados: Participante) => {
+  const salvarParticipanteHandler = (data: Participante) => {
     setIsModalParticipanteOpen(false);
-    if (!dados.id) {
-      dados.id = nanoid();
-      addParticipante(dados);
+    if (!data.id) {
+      data.id = nanoid();
+      addParticipante(data);
     } else {
-      const index = participantes.findIndex(p => p.id === dados.id);
-      editParticipante(index, dados);
+      const index = participantes.findIndex(p => p.id === data.id);
+      editParticipante(index, data);
     }
   }
   const cancelarEdicaoParticipanteHandler = () => {
@@ -57,18 +60,33 @@ export const AtaEditPage: FC = () => {
   }
 
   // ------ Handlers: pauta ------
-  const novaPautaHandler = (pauta: Pauta) => {
-    // const pautas = [...state.pautas, pauta];
-    // setState({ pautas });
+  const [isModalPautaOpen, setIsModalPautaOpen] = useState(false);
+  const [pauta, setPauta] = useState<Pauta>({ ...PAUTA_DEFAULT_VALUE });
+  const pautas = getValues('pautas');
+
+  const novaPautaHandler = () => {
+    setPauta({ ...PAUTA_DEFAULT_VALUE, indice: pautas.length + 1 });
+    setIsModalPautaOpen(true);
   }
   const editarPautaHandler = (index: number) => {
-    // const participantes = state.participantes.filter((_, i) => i !== index)
-    // setState({ participantes })
+    setPauta(pautas[index]);
+    setIsModalPautaOpen(true);
   }
   const removerPautaHandler = (index: number) => {
-    // const pautasSemIndex = state.pautas.filter((_, i) => i !== index)
-    // const pautasReindexadas = pautasSemIndex.map((p, i) => ({ ...p, indice: i + 1 }))
-    // setState({ pautas: pautasReindexadas })
+    removePauta(index);
+  }
+  const salvarPautaHandler = (data: Pauta) => {
+    setIsModalPautaOpen(false);
+    if (!data.id) {
+      data.id = nanoid();
+      addParticipante(data);
+    } else {
+      const index = pautas.findIndex(p => p.id === data.id);
+      editPauta(index, data);
+    }
+  }
+  const cancelarEdicaoPautaHandler = () => {
+    setIsModalPautaOpen(false);
   }
 
   // ------ Handlers: ata ------
@@ -105,9 +123,10 @@ export const AtaEditPage: FC = () => {
             <Card.Header>Pautas</Card.Header>
             <Card.Body>
               <AtaPautas
-                pautas={[]}
-                onAddPauta={novaPautaHandler}
-                onRemovePauta={removerPautaHandler}
+                items={pautas}
+                onNovaPautaClick={novaPautaHandler}
+                onEditarPautaClick={editarPautaHandler}
+                onRemoverPautaClick={removerPautaHandler}
               />
             </Card.Body>
           </Card>
@@ -127,10 +146,10 @@ export const AtaEditPage: FC = () => {
       />
 
       <AtaPautaModal
-        data={pautas}
+        data={pauta}
         isOpen={isModalPautaOpen}
-        onSave={closeModalHandler}
-        onCancel={addPautaHandler}
+        onSave={salvarPautaHandler}
+        onCancel={cancelarEdicaoPautaHandler}
       />
     </Container>
   )

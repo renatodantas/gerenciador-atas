@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Participante } from "../../../models/participante";
+import { FeedbackLabel } from "../../common/FeedbackLabel";
 
 interface AtaParticipanteModalProps {
   data: Participante;
@@ -9,12 +10,6 @@ interface AtaParticipanteModalProps {
   onSave: (data: Participante) => void;
   onCancel: () => void;
 }
-
-const LabelCampoObrigatorio = () => (
-  <Form.Control.Feedback type="invalid">
-    Campo obrigatório
-  </Form.Control.Feedback>
-)
 
 export const AtaParticipanteModal = ({ data, isOpen, onSave, onCancel }: AtaParticipanteModalProps) => {
   const { register, reset, handleSubmit, formState: { errors } } = useForm<Participante>();
@@ -36,7 +31,7 @@ export const AtaParticipanteModal = ({ data, isOpen, onSave, onCancel }: AtaPart
               className={errors.nome && 'is-invalid'}
               {...register(`nome` as const, { required: true })}
             />
-            <LabelCampoObrigatorio />
+            <FeedbackLabel />
           </FloatingLabel>
 
           <FloatingLabel className="mb-3" label="Área">
@@ -46,7 +41,7 @@ export const AtaParticipanteModal = ({ data, isOpen, onSave, onCancel }: AtaPart
               className={errors.area && 'is-invalid'}
               {...register(`area` as const, { required: true })}
             />
-            <LabelCampoObrigatorio />
+            <FeedbackLabel />
           </FloatingLabel>
 
           <FloatingLabel className="mb-3" label="E-mail">
@@ -65,7 +60,9 @@ export const AtaParticipanteModal = ({ data, isOpen, onSave, onCancel }: AtaPart
           <Form.Group className="mb-3">
             <Form.Check label="Presente?" {...register(`presente`)} />
           </Form.Group>
+
           <hr />
+
           <div className="d-flex justify-content-end">
             <Button variant="link" onClick={onCancel}>Cancelar</Button>
             <Button variant="primary" size="sm" type="submit">

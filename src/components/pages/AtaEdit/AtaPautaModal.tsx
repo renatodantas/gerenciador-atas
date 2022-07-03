@@ -1,7 +1,9 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import { Button, FloatingLabel, Form, Modal, Table } from "react-bootstrap";
+import { useEffect } from "react";
+import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { Pauta } from "../../../models/pauta";
 import { TheEditor } from "../../common/Editor";
+import { FeedbackLabel } from "../../common/FeedbackLabel";
 
 interface AtaPautaModalProps {
   data: Pauta;
@@ -15,41 +17,25 @@ export const AtaPautaModal = ({ data, isOpen, onSave, onCancel }: AtaPautaModalP
   const onSubmit = (submittedData: any) => onSave(submittedData);
   useEffect(() => reset(data), [data]);
 
-  const limparCampos = () => {
-    setTopico('');
-    //setDescricao('');
-    setDeliberacoes([]);
-  }
-
-  const addDeliberacaoHandler = () => {
-    setDeliberacoes(current => [...current, deliberacao]);
-    setDeliberacao('');
-  }
-
-  const removeDeliberacaoHandler = (index: number) => {
-    setDeliberacoes(current => [...current.splice(index, 1)])
-  }
-
-  const submitHandler = (event: FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    onAddPauta({ topico, descricao: 'descricao', deliberacoes });
-    limparCampos();
-    onClose();
-  }
-
-
   return (
-    <Modal show={openModal} onHide={onClose} size="lg">
+    <Modal show={isOpen} onHide={onCancel} size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Adicionar Participante</Modal.Title>
+        <Modal.Title>Editar Pauta</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <FloatingLabel className="mb-3" label="Tópico">
-          <Form.Control type="text" name="topico" placeholder="Tópico" value={topico} onChange={e => setTopico(e.target.value)} />
-        </FloatingLabel>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FloatingLabel label={`${data.indice}º tópico`} >
+            <Form.Control
+              type="text"
+              placeholder="Tópico"
+              className={errors.topico && 'is-invalid'}
+              {...register(`topico` as const, { required: true })}
+            />
+            <FeedbackLabel />
+          </FloatingLabel>
 
-        {/* <Row>
+          {/* <Row>
           <Col sm='10'>
             <FormControl
               as="textarea"
@@ -66,38 +52,18 @@ export const AtaPautaModal = ({ data, isOpen, onSave, onCancel }: AtaPautaModalP
             </Button>
           </Col>
         </Row> */}
-        <TheEditor />
+          <TheEditor />
 
-        {deliberacoes.length > 0 && (
-          <Table size="sm" className="mt-3">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Deliberação</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {deliberacoes.map((d, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{d}</td>
-                  <td style={{ width: '50px' }}>
-                    <i className="icone-link bi-x-circle text-danger" title="Excluir" onClick={() => removeDeliberacaoHandler(index)}></i>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+          <hr />
+
+          <div className="d-flex justify-content-end">
+            <Button variant="link" onClick={onCancel}>Cancelar</Button>
+            <Button variant="primary" size="sm" type="submit">
+              <i className="bi-plus-circle-fill fs-6 me-2"></i> Adicionar
+            </Button>
+          </div>
+        </form>
       </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant="link" onClick={onClose}>Cancelar</Button>
-        <Button variant="primary" size="sm" onClick={submitHandler}>
-          <i className="bi-plus-circle-fill fs-6 me-2"></i> Adicionar
-        </Button>
-      </Modal.Footer>
     </Modal>
   )
 }
