@@ -5,6 +5,7 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { Ata, ATA_DEFAULT_VALUES } from "../../../models/ata";
 import { Participante, PARTICIPANTE_DEFAULT_VALUES } from "../../../models/participante";
 import { Pauta, PAUTA_DEFAULT_VALUE } from "../../../models/pauta";
+import { QuillEditor } from "../../common/QuillEditor";
 import { AtaIdentificacao } from "./AtaIdentificacao";
 import { AtaParticipanteModal } from "./AtaParticipanteModal";
 import { AtaParticipantes } from "./AtaParticipantes";
@@ -128,6 +129,7 @@ export const AtaEditPage: FC = () => {
                 onEditarPautaClick={editarPautaHandler}
                 onRemoverPautaClick={removerPautaHandler}
               />
+              <QuillEditor />
             </Card.Body>
           </Card>
 
